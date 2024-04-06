@@ -57,7 +57,7 @@ def verify_requirements():
         print("Your SHELL %s is not supported" % get_shell(), file=sys.stderr)
         sys.exit(1)
     if get_shell() == "bash":
-        version_text = subprocess.Popen("bash --version | head -1", shell=True, stdout=subprocess.PIPE).stdout.read()
+        version_text = subprocess.Popen("bash --version | head -1", shell=True, stdout=subprocess.PIPE, text=True).stdout.read()
         m = re.search('(\d).(\d)', version_text)
         if m:
             major_version = int(m.group(1))
@@ -81,14 +81,14 @@ def main():
     verify_requirements()
     print("---------------------------------------")
     config_dir_relative_path = '.local/share/marker'
-    config_dir_abosulte_path = os.path.join(os.path.expanduser("~"), config_dir_relative_path)
+    config_dir_absolute_path = os.path.join(os.path.expanduser("~"), config_dir_relative_path)
     install_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 
-    mkdir(config_dir_abosulte_path)
+    mkdir(config_dir_absolute_path)
     
     write_to_file(
-        os.path.join(config_dir_abosulte_path, 'marker.sh'),
-        generate_marker_sh(config_dir_abosulte_path, install_dir))
+        os.path.join(config_dir_absolute_path, 'marker.sh'),
+        generate_marker_sh(config_dir_absolute_path, install_dir))
 
     show_post_installation_message(config_dir_relative_path)
     print("---------------------------------------")
